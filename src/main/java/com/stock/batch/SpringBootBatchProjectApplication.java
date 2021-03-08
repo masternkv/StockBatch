@@ -2,6 +2,7 @@ package com.stock.batch;
 
 import java.util.Arrays;
 
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 @SpringBootApplication
+@EnableBatchProcessing
 public class SpringBootBatchProjectApplication  implements ApplicationContextAware{
 
 	
