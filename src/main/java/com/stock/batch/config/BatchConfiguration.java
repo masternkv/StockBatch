@@ -30,7 +30,6 @@ import com.stock.batch.processor.StockCountProcessor;
 import com.stock.batch.tasklet.StockExtractTasklet;
 
 @Configuration
-@EnableBatchProcessing
 public class BatchConfiguration {
 
     @Autowired
@@ -108,7 +107,7 @@ public class BatchConfiguration {
         return jobBuilderFactory.get("importStockJob")
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
-                .flow(stockStep1()).next(stockExtractorStep())
+                .flow(stockStep1())
                 .end()
                 .build();
     }
@@ -123,15 +122,15 @@ public class BatchConfiguration {
                 .build();
     }
    
-/*    @Bean
-    public Job importStockJob1() {
-        return jobBuilderFactory.get("importStockJob")
+    @Bean
+    public Job extractDataJob() {
+        return jobBuilderFactory.get("extractDataJob")
                 .incrementer(new RunIdIncrementer())
                 .flow(stockExtractorStep())
                 .end()
                 .build();
     }
-    */
+    
     @Bean
     public Step stockExtractorStep() {
         return stepBuilderFactory.get("stockExtractorStep")

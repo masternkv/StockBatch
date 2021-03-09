@@ -28,6 +28,7 @@ import com.opencsv.CSVWriter;
 import com.stock.batch.model.NiftyStock;
 import com.stock.batch.model.NiftyStockCount;
 import com.stock.batch.model.Person;
+import com.stock.batch.utility.CalculateChange;
 
 @Component
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
@@ -76,14 +77,13 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 							}
 						});
 				sbf.append(niftycount.getStockName()).append(",");
-				String past_price = niftydailyresult.get(0).getStockPrice();
-				String current_price = niftydailyresult.get(niftydailyresult.size() - 1).getStockPrice();
-				List<Double> getComaprePrice = getFormattedNumber(past_price, current_price);
+				CalculateChange chg=new CalculateChange();
+				List<Double> getComaprePrice = chg.getFormattedNumber(niftycount.getStockName());
 
 				// Float change_price=(fist_price-current_price);
 				BigDecimal pastPrice = new BigDecimal(getComaprePrice.get(0));
 				BigDecimal curPrice = new BigDecimal(getComaprePrice.get(getComaprePrice.size() - 1));
-				BigDecimal result = pastPrice.subtract(curPrice);
+				BigDecimal result = curPrice.subtract(pastPrice);
 				sbf.append(result).append(",");
 				for (NiftyStock niftystock : niftydailyresult) {
 					{
@@ -122,25 +122,5 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 			System.out.println("Content of StringBuffer written to File.");
 
 		}
-	}
-
-	public List<Double> getFormattedNumber(String pastPrice, String currentPrice) {
-
-		List<Double> addPrice = new ArrayList<>();
-		Double storePast = 0.0;
-		Double storeCurrentprice = 0.0;
-
-		if (!pastPrice.isEmpty()) {
-			pastPrice = pastPrice.replaceAll(",", "");
-			storePast = Double.parseDouble(pastPrice);
-		}
-		if (!currentPrice.isEmpty()) {
-			currentPrice = currentPrice.replaceAll(",", "");
-			storeCurrentprice = Double.parseDouble(currentPrice);
-		}
-		addPrice.add(storePast);
-		addPrice.add(storeCurrentprice);
-
-		return addPrice;
 	}
 }
